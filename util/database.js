@@ -12,7 +12,7 @@ const mongoConnect = (callback)=>{
     callback();
   })
   .catch(err=>{
-    console.lgo(err);
+    console.log(err);
     throw err;
   })
 };
