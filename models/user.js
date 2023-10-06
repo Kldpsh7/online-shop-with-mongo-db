@@ -53,6 +53,19 @@ class User{
         .catch(err=>console.log(err))
     }
 
+    deleteCartItem(prodId){
+        const cartProduct = this.cart.items.findIndex(cp=>{
+            return cp.productId.toString()===prodId.toString()
+        });
+        const db = getDb();
+        let updatedCart = this.cart
+        updatedCart.items.splice(cartProduct,1);
+        return db.collection('users').updateOne(
+            {_id:new mongodb.ObjectId(this._id)},
+            { $set : {cart:updatedCart}}
+            );
+    }
+
     static findById(userId){
         const db = getDb();
         return db.collection('users').find({_id:new mongodb.ObjectId(userId)}).next()
