@@ -26,7 +26,9 @@ const userSchema = new Schema({
             }
         ]
     }
-});
+},
+{  timestamps: true, toJSON: { virtuals: true } }
+);
 
 userSchema.methods.addToCart = function(product){
     const cartProduct = this.cart.items.findIndex(cp=>{
@@ -38,6 +40,14 @@ userSchema.methods.addToCart = function(product){
     else{
         this.cart.items = [...this.cart.items,{productId: product._id,quantity:1}];
     }
+    return this.save();
+}
+
+userSchema.methods.removeFromCart = function(prodId){
+    const updatedCartItems = this.cart.items.filter(item=>{
+        return item.productId.toString()!==prodId.toString();
+    });
+    this.cart.items = updatedCartItems;
     return this.save();
 }
 
